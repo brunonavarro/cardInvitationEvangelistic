@@ -166,6 +166,7 @@
 
     <!-- ===== FORMULARIO ===== -->
     <div class="form-box">
+      <input type="text" id="iglesiaInput" placeholder="Nombre de la iglesia">
       <input type="text" id="nameInput" placeholder="Nombre del invitado">
       <input type="text" id="friendInput" placeholder="Compañía / Familia">
       <input type="text" id="lugarInput" placeholder="Lugar">
@@ -181,12 +182,12 @@
             <path d="M12 2v20M2 12h20" stroke="#a67c00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h1 class="title">Invitación Especial</h1>
+        <h1 class="title" id="recipient_iglesia">[Iglesia]<br><br>Invitación Especial</h1>
         <p class="subtitle">
           Te invitamos a escuchar el evangelio de Cristo — una noche de reflexión, música y esperanza.
         </p>
         <p style="color: var(--muted); font-size: 0.95rem; margin-top: 8px">
-          Trae a un amigo. Habrá café de bienvenida y tiempo para conversar.
+          Trae a un amigo. Habrá predicación, alabanza y números especiales.
         </p>
       </section>
 
@@ -237,9 +238,11 @@
       const recipient = document.getElementById("recipient");
       const recipientFriend = document.getElementById("recipient_friend");
       const recipientLugar = document.getElementById("recipient_lugar");
+      const recipientIglesia = document.getElementById("recipient_iglesia");
       const nameInput = document.getElementById("nameInput");
       const friendInput = document.getElementById("friendInput");
       const lugarInput = document.getElementById("lugarInput");
+      const iglesiaInput = document.getElementById("iglesiaInput");
 
       // Actualizar texto en vivo
       nameInput.addEventListener("input", () => {
@@ -250,6 +253,9 @@
       });
       lugarInput.addEventListener("input", () => {
         recipientLugar.innerHTML = `${lugarInput.value || "[Lugar]"}`;
+      });
+      iglesiaInput.addEventListener("input", () => {
+        recipientIglesia.innerHTML = `${iglesiaInput.value || "[Iglesia]"}`;
       });
 
       // Lista de 10 versículos
