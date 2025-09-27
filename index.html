@@ -287,7 +287,7 @@
       // Descargar imagen PNG
       document.getElementById("downloadBtn").addEventListener("click", () => {
         const card = document.querySelector(".card-wrap");
-        html2canvas(card, { scale: 3, backgroundColor: null }).then(canvas => {
+        html2canvas(card, { scale: 3, backgroundColor: "#fff" }).then(canvas => {
           const link = document.createElement("a");
           link.download = "invitacion-evangelistica.png";
           link.href = canvas.toDataURL("image/png");
@@ -297,6 +297,7 @@
     </script>
   </body>
 </html>
+
 
 
 
