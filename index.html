@@ -69,21 +69,6 @@
         transition: background 0.2s;
       }
       .download-btn:hover { background: #8a6300; }
-      .btn {
-        background: var(--accent);
-        color: white;
-        border: none;
-        padding: 0.7rem 1.4rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        transition: background 0.2s;
-      }
-      .btn:hover {
-        background: #8a6300;
-      }
 
       /* ===== TARJETA ===== */
       .card-wrap {
@@ -170,7 +155,7 @@
       <input type="text" id="nameInput" placeholder="Nombre del invitado">
       <input type="text" id="friendInput" placeholder="Compañía / Familia">
       <input type="text" id="lugarInput" placeholder="Lugar">
-      <button class="btn" onclick="nuevoVersiculo()">Nuevo Versículo</button>
+      <button class="download-btn" onclick="nuevoVersiculo()">Nuevo Versículo</button>
       <button class="download-btn" id="downloadBtn">📥 Descargar PNG</button>
     </div>
 
@@ -297,6 +282,7 @@
     </script>
   </body>
 </html>
+
 
 
 
