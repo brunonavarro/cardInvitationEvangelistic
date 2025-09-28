@@ -45,17 +45,31 @@
         border-radius: 12px;
         box-shadow: 0 6px 18px rgba(0,0,0,0.1);
         display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        max-width: 920px;
+        width: 100%;
+      }
+      .form-top,
+      .form-bottom {
+        display: flex;
         flex-wrap: wrap;
         gap: 1rem;
         justify-content: center;
       }
-      .form-box input {
+      .form-top input[type="text"] {
         padding: 0.6rem 0.8rem;
         border-radius: 8px;
         border: 1px solid #ccc;
         font-size: 1rem;
-        width: 150px;
+        flex: 1 1 200px;
+        background: #fafafa;
       }
+      /* Ocultar el input file nativo */
+      #logoInput {
+        display: none;
+      }
+      /* Botones */
       .download-btn {
         background: var(--accent);
         color: white;
@@ -67,15 +81,19 @@
         cursor: pointer;
         box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         transition: background 0.2s;
+        text-align: center;
       }
       .download-btn:hover { background: #8a6300; }
+
+      /* Para el label que actúa como botón de archivo */
+      .file-btn {
+        display: inline-block;
+      }
 
       /* ===== TARJETA ===== */
       .card-wrap {
         width: 920px;
         max-width: 95vw;
-        /** OBSERVADO aspect-ratio: 16/10; **/
-        height: auto;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
@@ -94,7 +112,7 @@
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="%23a67c00" offset="0" stop-opacity="0.08"/><stop stop-color="%23a67c00" offset="1" stop-opacity="0.02"/></linearGradient></defs><rect width="100%" height="100%" fill="transparent"/><g transform="translate(230,80) scale(1.2)"><path d="M150 0 L190 0 L190 140 L300 140 L300 180 L190 180 L190 420 L150 420 L150 180 L40 180 L40 140 L150 140 Z" fill="url(%23g)" opacity="0.9"/></g></svg>');
         background-repeat: no-repeat;
         background-position: left -40px top -40px;
-        background-size: 720px 580px; /*  540px */
+        background-size: 720px 580px;
         pointer-events: none;
         opacity: 0.9;
         transform: rotate(-3deg);
@@ -108,10 +126,11 @@
         background: linear-gradient(135deg, rgba(166, 124, 0, 0.14), rgba(166, 124, 0, 0.06));
         border: 1px solid rgba(166, 124, 0, 0.12);
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) inset;
+        overflow: hidden;
       }
+      .seal img { max-width: 70%; max-height: 70%; object-fit: contain; }
       .title { font-size: clamp(1.6rem, 2.8vw, 2.4rem); font-weight: 700; letter-spacing: -0.02em; color: var(--accent); text-transform: uppercase; }
       .subtitle { color: var(--muted); font-size: 0.95rem; }
-
       .details {
         background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.01));
         padding: 2rem;
@@ -123,8 +142,8 @@
         backdrop-filter: blur(6px);
       }
       .to { font-size: 0.95rem; color: var(--muted); }
-      .to-name { font-weight: 700; font-size: 2.25rem; color: #222; }
-      .to-friend { font-weight: 700; font-size: 0.95rem; color: var(--muted); }
+      .to-name { font-weight: 700; font-size: 2.25rem; color: #222; text-align:center; }
+      .to-friend { font-weight: 700; font-size: 0.95rem; color: var(--muted); text-align:center; }
       .event { font-size: 1.05rem; font-weight: 600; color: #333; margin-top: 6px; }
       .info { display: flex; gap: 1rem; flex-wrap: wrap; }
       .info .item {
@@ -141,7 +160,7 @@
       .notes { font-size: 0.82rem; color: var(--muted); }
 
       @media (max-width: 720px) {
-        .card-wrap { grid-template-columns: 1fr; padding: 1rem; } /** observado aspect-ratio: auto;  */
+        .card-wrap { grid-template-columns: 1fr; padding: 1rem; }
         .visual { order: 2; }
         .details { order: 1; }
       }
@@ -151,18 +170,28 @@
 
     <!-- ===== FORMULARIO ===== -->
     <div class="form-box">
-      <input type="text" id="iglesiaInput" placeholder="Nombre de la iglesia">
-      <input type="text" id="nameInput" placeholder="Nombre del invitado">
-      <input type="text" id="friendInput" placeholder="Compañía / Familia">
-      <input type="text" id="lugarInput" placeholder="Lugar">
-      <button class="download-btn" onclick="nuevoVersiculo()">Nuevo Versículo</button>
-      <button class="download-btn" id="downloadBtn">📥 Descargar PNG</button>
+      <!-- 🟢 Inputs de texto arriba -->
+      <div class="form-top">
+        <input type="text" id="iglesiaInput" placeholder="Nombre de la iglesia">
+        <input type="text" id="nameInput" placeholder="Nombre del invitado">
+        <input type="text" id="friendInput" placeholder="Compañía / Familia">
+        <input type="text" id="lugarInput" placeholder="Lugar">
+      </div>
+
+      <!-- 🟢 Botones abajo -->
+      <div class="form-bottom">
+        <label for="logoInput" class="download-btn file-btn">📷 Seleccionar Logo</label>
+        <input type="file" id="logoInput" accept="image/*">
+        <button class="download-btn" onclick="nuevoVersiculo()">Nuevo Versículo</button>
+        <button class="download-btn" id="downloadBtn">📥 Descargar Invitación</button>
+      </div>
     </div>
 
     <!-- ===== TARJETA ===== -->
     <article class="card-wrap">
       <section class="visual">
-        <div class="seal">
+        <div class="seal" id="sealContainer">
+          <!-- SVG inicial (se reemplazará si el usuario sube un logo) -->
           <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
             <path d="M12 2v20M2 12h20" stroke="#a67c00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -179,8 +208,8 @@
       <section class="details">
         <div>
           <div class="to">Para:</div>
-          <div class="to-name" id="recipient"><center>[Invitado]</center></div>
-          <div class="to-friend" id="recipient_friend"><center>[y compañía]</center></div>
+          <div class="to-name" id="recipient">[Invitado]</div>
+          <div class="to-friend" id="recipient_friend">[y compañía]</div>
         </div>
 
         <div>
@@ -228,60 +257,82 @@
       const friendInput = document.getElementById("friendInput");
       const lugarInput = document.getElementById("lugarInput");
       const iglesiaInput = document.getElementById("iglesiaInput");
+      const logoInput = document.getElementById("logoInput");
+      const sealContainer = document.getElementById("sealContainer");
 
       // Actualizar texto en vivo
       nameInput.addEventListener("input", () => {
-        recipient.innerHTML = `<center>${nameInput.value || "[Invitado]"}</center>`;
+        recipient.textContent = nameInput.value || "[Invitado]";
       });
       friendInput.addEventListener("input", () => {
-        recipientFriend.innerHTML = `<center>${friendInput.value || "[y compañía]"}</center>`;
+        recipientFriend.textContent = friendInput.value || "[y compañía]";
       });
       lugarInput.addEventListener("input", () => {
-        recipientLugar.innerHTML = `${lugarInput.value || "[Lugar]"}`;
+        recipientLugar.textContent = lugarInput.value || "[Lugar]";
       });
       iglesiaInput.addEventListener("input", () => {
-        recipientIglesia.innerHTML = `${iglesiaInput.value || "[Iglesia]"}`;
+        recipientIglesia.innerHTML = `${iglesiaInput.value || "[Iglesia]"}<br><br>Invitación Especial`;
       });
 
-      // Lista de 10 versículos
-      const versiculos = [
-        "Juan 3:16 RVR1960 – Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.",
-        "Salmos 23:1 RVR1960 – Jehová es mi pastor; nada me faltará.",
-        "Romanos 8:28 RVR1960 – Y sabemos que a los que aman a Dios, todas las cosas les ayudan a bien, esto es, a los que conforme a su propósito son llamados.",
-        "Filipenses 4:13 RVR1960 – Todo lo puedo en Cristo que me fortalece.",
-        "Mateo 11:28 RVR1960 – Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.",
-        "Isaías 41:10 RVR1960 – No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo; siempre te ayudaré, siempre te sustentaré con la diestra de mi justicia.",
-        "Jeremías 29:11 RVR1960 – Porque yo sé los planes que tengo para vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.",
-        "Proverbios 3:5 RVR1960 – Fíate en Jehová de todo tu corazón, y no te apoyes en tu propia prudencia.",
-        "Salmos 46:1 RVR1960 – Dios es nuestro amparo y fortaleza, nuestro pronto auxilio en las tribulaciones.",
-        "Juan 14:6 RVR1960 – Jesús dijo: Yo soy el camino, y la verdad, y la vida; nadie viene al Padre, sino por mí."
-      ];
+      // Reemplazar logo (sin DB)
+      logoInput.addEventListener("change", e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          sealContainer.innerHTML = `<img src="${ev.target.result}" alt="Logo">`;
+        };
+        reader.readAsDataURL(file);
+      });
 
-      // Función que elige y muestra un versículo aleatorio
+      // Lista de versículos
+      const versiculos = [
+        "Juan 3:16 RVR1960 – Porque de tal manera amó Dios al mundo...",
+        "Salmos 23:1 RVR1960 – Jehová es mi pastor; nada me faltará.",
+        "Romanos 8:28 RVR1960 – Y sabemos que a los que aman a Dios...",
+        "Filipenses 4:13 RVR1960 – Todo lo puedo en Cristo que me fortalece.",
+        "Mateo 11:28 RVR1960 – Venid a mí todos los que estáis trabajados...",
+        "Isaías 41:10 RVR1960 – No temas, porque yo estoy contigo...",
+        "Jeremías 29:11 RVR1960 – Porque yo sé los planes que tengo para vosotros...",
+        "Proverbios 3:5 RVR1960 – Fíate en Jehová de todo tu corazón...",
+        "Salmos 46:1 RVR1960 – Dios es nuestro amparo y fortaleza...",
+        "Juan 14:6 RVR1960 – Jesús dijo: Yo soy el camino, y la verdad..."
+      ];
       function nuevoVersiculo() {
         const random = Math.floor(Math.random() * versiculos.length);
         document.getElementById("versiculo").textContent = versiculos[random];
       }
-
-      // Mostrar uno al cargar la página
       window.addEventListener("DOMContentLoaded", nuevoVersiculo);
-
-
-      
 
       // Descargar imagen PNG
       document.getElementById("downloadBtn").addEventListener("click", () => {
         const card = document.querySelector(".card-wrap");
-        html2canvas(card, { scale: 3, backgroundColor: "#fff" }).then(canvas => {
+
+        // 🔵 Clonar tarjeta para render horizontal de escritorio
+        const clone = card.cloneNode(true);
+        clone.style.width = "920px";           // Ancho fijo de escritorio
+        clone.style.maxWidth = "920px";
+        clone.style.gridTemplateColumns = "1fr 1fr"; // Forzar dos columnas
+        clone.style.padding = "2rem";          // Padding de escritorio
+        clone.style.transform = "scale(1)";    // Asegura que no se reduzca
+        clone.style.position = "absolute";
+        clone.style.left = "-9999px";          // Oculto fuera de pantalla
+
+        document.body.appendChild(clone);
+
+        // Render con html2canvas del clon
+        html2canvas(clone, { scale: 3, backgroundColor: "#fff" }).then(canvas => {
           const link = document.createElement("a");
           link.download = "invitacion-evangelistica.png";
           link.href = canvas.toDataURL("image/png");
           link.click();
+          document.body.removeChild(clone); // limpiar
         });
       });
     </script>
   </body>
 </html>
+
 
 
 
