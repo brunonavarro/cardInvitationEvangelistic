@@ -265,10 +265,10 @@
         recipient.textContent = nameInput.value || "[Invitado]";
       });
       friendInput.addEventListener("input", () => {
-        recipientFriend.textContent = friendInput.value || "[y compañía]";
+        recipientFriend.textContent = friendInput.value || "";
       });
       lugarInput.addEventListener("input", () => {
-        recipientLugar.textContent = lugarInput.value || "[Lugar]";
+        recipientLugar.textContent = lugarInput.value || "";
       });
       iglesiaInput.addEventListener("input", () => {
         recipientIglesia.innerHTML = `${iglesiaInput.value || "[Iglesia]"}<br><br>Invitación Especial`;
@@ -332,6 +332,7 @@
     </script>
   </body>
 </html>
+
 
 
 
