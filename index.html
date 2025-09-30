@@ -65,6 +65,27 @@
         flex: 1 1 200px;
         background: #fafafa;
       }
+      .form-top select {
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        flex: 1 1 200px;
+        background: #fafafa;
+        appearance: none; /* Oculta la flechita nativa */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;utf8,<svg fill='%235b6470' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 0.8rem center;
+        background-size: 1rem;
+        cursor: pointer;
+      }
+      .form-top select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(166,124,0,0.25);
+      }
       /* Ocultar el input file nativo */
       #logoInput {
         display: none;
@@ -172,7 +193,11 @@
     <div class="form-box">
       <!-- 🟢 Inputs de texto arriba -->
       <div class="form-top">
-        <input type="text" id="iglesiaInput" placeholder="Nombre de la iglesia">
+        <select id="iglesiaSelect">
+          <option value="">-- Seleccionar Iglesia --</option>
+          <option value="iglesia1">IEB Maranatha</option>
+        </select>
+        <!--<input type="text" id="iglesiaInput" placeholder="Nombre de la iglesia">-->
         <input type="text" id="nameInput" placeholder="Nombre del invitado">
         <input type="text" id="friendInput" placeholder="Compañía / Familia">
         <input type="text" id="lugarInput" placeholder="Lugar">
@@ -180,7 +205,7 @@
 
       <!-- 🟢 Botones abajo -->
       <div class="form-bottom">
-        <label for="logoInput" class="download-btn file-btn">📷 Seleccionar Logo</label>
+        <!--<label for="logoInput" class="download-btn file-btn">📷 Seleccionar Logo</label>-->
         <input type="file" id="logoInput" accept="image/*">
         <button class="download-btn" onclick="nuevoVersiculo()">Nuevo Versículo</button>
         <button class="download-btn" id="downloadBtn">📥 Descargar Invitación</button>
@@ -249,6 +274,21 @@
     <!-- ===== SCRIPTS ===== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+      const iglesias = {
+        iglesia1: {
+          nombre: "IEB Maranatha",
+          logo: "https://raw.githubusercontent.com/brunonavarro/cardInvitationEvangelistic/main/logos/IEB-Maranatha-logo.png"
+        },
+        iglesia2: {
+          nombre: "IEB Emanuel",
+          logo: "https://raw.githubusercontent.com/brunonavarro/cardInvitationEvangelistic/main/logos/IEB-Emanuel-logo.png"
+        },
+        iglesia3: {
+          nombre: "IEB La Luz del Mundo",
+          logo: "https://raw.githubusercontent.com/brunonavarro/cardInvitationEvangelistic/main/logos/IEB-La-Luz-del-Mundo-logo.png"
+        }
+      };
+
       const recipient = document.getElementById("recipient");
       const recipientFriend = document.getElementById("recipient_friend");
       const recipientLugar = document.getElementById("recipient_lugar");
@@ -259,6 +299,8 @@
       const iglesiaInput = document.getElementById("iglesiaInput");
       const logoInput = document.getElementById("logoInput");
       const sealContainer = document.getElementById("sealContainer");
+      const iglesiaSelect = document.getElementById("iglesiaSelect");
+
 
       // Actualizar texto en vivo
       nameInput.addEventListener("input", () => {
@@ -270,12 +312,12 @@
       lugarInput.addEventListener("input", () => {
         recipientLugar.textContent = lugarInput.value || "";
       });
-      iglesiaInput.addEventListener("input", () => {
+      /*iglesiaInput.addEventListener("input", () => {
         recipientIglesia.innerHTML = `${iglesiaInput.value || "[Iglesia]"}<br><br>Invitación Especial`;
-      });
+      });*/
 
       // Reemplazar logo (sin DB)
-      logoInput.addEventListener("change", e => {
+      /*logoInput.addEventListener("change", e => {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
@@ -283,26 +325,63 @@
           sealContainer.innerHTML = `<img src="${ev.target.result}" alt="Logo">`;
         };
         reader.readAsDataURL(file);
-      });
+      });*/
 
       // Lista de versículos
       const versiculos = [
-        "Juan 3:16 RVR1960 – Porque de tal manera amó Dios al mundo...",
+        "Juan 3:16 RVR1960 – Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.",
         "Salmos 23:1 RVR1960 – Jehová es mi pastor; nada me faltará.",
-        "Romanos 8:28 RVR1960 – Y sabemos que a los que aman a Dios...",
+        "Romanos 8:28 RVR1960 – Y sabemos que a los que aman a Dios, todas las cosas les ayudan a bien, esto es, a los que conforme a su propósito son llamados.",
         "Filipenses 4:13 RVR1960 – Todo lo puedo en Cristo que me fortalece.",
-        "Mateo 11:28 RVR1960 – Venid a mí todos los que estáis trabajados...",
-        "Isaías 41:10 RVR1960 – No temas, porque yo estoy contigo...",
-        "Jeremías 29:11 RVR1960 – Porque yo sé los planes que tengo para vosotros...",
-        "Proverbios 3:5 RVR1960 – Fíate en Jehová de todo tu corazón...",
-        "Salmos 46:1 RVR1960 – Dios es nuestro amparo y fortaleza...",
-        "Juan 14:6 RVR1960 – Jesús dijo: Yo soy el camino, y la verdad..."
+        "Mateo 11:28 RVR1960 – Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar.",
+        "Isaías 41:10 RVR1960 – No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo; siempre te ayudaré, siempre te sustentaré con la diestra de mi justicia.",
+        "Jeremías 29:11 RVR1960 – Porque yo sé los planes que tengo para vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.",
+        "Proverbios 3:5 RVR1960 – Fíate en Jehová de todo tu corazón, y no te apoyes en tu propia prudencia.",
+        "Salmos 46:1 RVR1960 – Dios es nuestro amparo y fortaleza, nuestro pronto auxilio en las tribulaciones.",
+        "Juan 14:6 RVR1960 – Jesús dijo: Yo soy el camino, y la verdad, y la vida; nadie viene al Padre, sino por mí."
       ];
+
+
       function nuevoVersiculo() {
         const random = Math.floor(Math.random() * versiculos.length);
         document.getElementById("versiculo").textContent = versiculos[random];
       }
       window.addEventListener("DOMContentLoaded", nuevoVersiculo);
+
+      /**FUNCION SOLO SELECCIONABLE*/
+      // ✅ Cambio al seleccionar una iglesia (sin depender del input)
+      iglesiaSelect.addEventListener("change", () => {
+        const key = iglesiaSelect.value;
+        if (key && iglesias[key]) {
+          // Setear directo en la tarjeta
+          recipientIglesia.innerHTML = `${iglesias[key].nombre}<br><br>Invitación Especial`;
+          sealContainer.innerHTML = `<img src="${iglesias[key].logo}" alt="Logo">`;
+        } else {
+          // Restaurar valores por defecto
+          recipientIglesia.innerHTML = `[Iglesia]<br><br>Invitación Especial`;
+          sealContainer.innerHTML = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2v20M2 12h20" stroke="#a67c00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`;
+        }
+      });
+
+
+      /** FUNCION CON INPUTS*/
+      // ✅ Cambio al seleccionar una iglesia
+      /*iglesiaSelect.addEventListener("change", () => {
+        const key = iglesiaSelect.value;
+        if (key && iglesias[key]) {
+          iglesiaInput.value = iglesias[key].nombre;
+          recipientIglesia.innerHTML = `${iglesias[key].nombre}<br><br>Invitación Especial`;
+          sealContainer.innerHTML = `<img src="${iglesias[key].logo}" alt="Logo">`;
+        } else {
+          iglesiaInput.value = "";
+          recipientIglesia.innerHTML = `[Iglesia]<br><br>Invitación Especial`;
+          sealContainer.innerHTML = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2v20M2 12h20" stroke="#a67c00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`;
+        }
+      });*/
 
       // Descargar imagen PNG
       document.getElementById("downloadBtn").addEventListener("click", () => {
@@ -332,12 +411,3 @@
     </script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
