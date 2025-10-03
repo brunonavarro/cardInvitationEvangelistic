@@ -57,40 +57,6 @@
         gap: 1rem;
         justify-content: center;
       }
-      .form-top input[type="text"] {
-        padding: 0.6rem 0.8rem;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-        flex: 1 1 200px;
-        background: #fafafa;
-      }
-      .form-top select {
-        padding: 0.6rem 0.8rem;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-        flex: 1 1 200px;
-        background: #fafafa;
-        appearance: none; /* Oculta la flechita nativa */
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url("data:image/svg+xml;utf8,<svg fill='%235b6470' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-        background-repeat: no-repeat;
-        background-position: right 0.8rem center;
-        background-size: 1rem;
-        cursor: pointer;
-      }
-      .form-top select:focus {
-        outline: none;
-        border-color: var(--accent);
-        box-shadow: 0 0 0 2px rgba(166,124,0,0.25);
-      }
-      /* Ocultar el input file nativo */
-      #logoInput {
-        display: none;
-      }
-      /* Botones */
       .download-btn {
         background: var(--accent);
         color: white;
@@ -105,11 +71,6 @@
         text-align: center;
       }
       .download-btn:hover { background: #8a6300; }
-
-      /* Para el label que actúa como botón de archivo */
-      .file-btn {
-        display: inline-block;
-      }
 
       /* ===== TARJETA ===== */
       .card-wrap {
@@ -165,7 +126,6 @@
       }
       .to { font-size: 0.95rem; color: var(--muted); }
       .to-name { font-weight: 700; font-size: 2.25rem; color: #222; text-align:center; }
-      .to-friend { font-weight: 700; font-size: 0.95rem; color: var(--muted); text-align:center; }
       .event { font-size: 1.05rem; font-weight: 600; color: #333; margin-top: 6px; }
       .info { display: flex; gap: 1rem; flex-wrap: wrap; }
       .info .item {
@@ -189,11 +149,9 @@
     </style>
   </head>
   <body>
-    <!-- ===== FORMULARIO ===== -->
+    <!-- ===== FORMULARIO (sin inputs) ===== -->
     <div class="form-box">
-      <!-- 🟢 Botones abajo -->
       <div class="form-bottom">
-        <!--<label for="logoInput" class="download-btn file-btn">📷 Seleccionar Logo</label>-->
         <button class="download-btn" id="downloadBtn">📥 Descargar Invitación</button>
       </div>
     </div>
@@ -220,7 +178,6 @@
 
       <section class="visual">
         <div class="seal" id="sealContainer">
-          <!-- SVG inicial (se reemplazará si el usuario sube un logo) -->
           <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
             <path d="M12 2v20M2 12h20" stroke="#a67c00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -238,7 +195,6 @@
         <div>
           <div class="to">Para:</div>
           <div class="to-name" id="recipient">[Invitado]</div>
-          <!--<div class="to-friend" id="recipient_friend"></div>-->
         </div>
 
         <div>
@@ -265,7 +221,6 @@
             <div class="notes">
               <br>Referencia: Espaldas del Grifo AVA, Via de evitamiento
             </div>
-            <!--<div class="value" id="recipient_lugar"><br>[Lugar]</div>-->
           </div>
         </div>
 
@@ -300,19 +255,10 @@
       };
 
       const recipient = document.getElementById("recipient");
-      //const recipientFriend = document.getElementById("recipient_friend");
-      //const recipientLugar = document.getElementById("recipient_lugar");
       const recipientIglesia = document.getElementById("recipient_iglesia");
       const sealContainer = document.getElementById("sealContainer");
-      const iglesiaSelect = document.getElementById("iglesiaSelect");
 
-
-      // Actualizar texto en vivo
-      nameInput.addEventListener("input", () => {
-        recipient.textContent = nameInput.value || "[Invitado]";
-      });
-
-      // Lista de versículos
+      // Versículos
       const versiculos = [
         "Juan 3:16 RVR1960 – Porque de tal manera amó Dios al mundo, que ha dado a su Hijo unigénito, para que todo aquel que en él cree, no se pierda, mas tenga vida eterna.",
         "Salmos 23:1 RVR1960 – Jehová es mi pastor; nada me faltará.",
@@ -326,77 +272,91 @@
         "Juan 14:6 RVR1960 – Jesús dijo: Yo soy el camino, y la verdad, y la vida; nadie viene al Padre, sino por mí."
       ];
 
-
       function nuevoVersiculo() {
         const random = Math.floor(Math.random() * versiculos.length);
         document.getElementById("versiculo").textContent = versiculos[random];
       }
-      window.addEventListener("DOMContentLoaded", nuevoVersiculo);
 
-      // Descargar imagen PNG
-      document.getElementById("downloadBtn").addEventListener("click", () => {
-        const card = document.querySelector(".card-wrap");
-
-        // 🔵 Clonar tarjeta para render horizontal de escritorio
-        const clone = card.cloneNode(true);
-        clone.style.width = "920px";           // Ancho fijo de escritorio
-        clone.style.maxWidth = "920px";
-        clone.style.gridTemplateColumns = "1fr 1fr"; // Forzar dos columnas
-        clone.style.padding = "2rem";          // Padding de escritorio
-        clone.style.transform = "scale(1)";    // Asegura que no se reduzca
-        clone.style.position = "absolute";
-        clone.style.left = "-9999px";          // Oculto fuera de pantalla
-
-        document.body.appendChild(clone);
-
-        // Render con html2canvas del clon
-        html2canvas(clone, { scale: 3, backgroundColor: "#fff" }).then(canvas => {
-          const link = document.createElement("a");
-          link.download = "invitacion-evangelistica.png";
-          link.href = canvas.toDataURL("image/png");
-          link.click();
-          document.body.removeChild(clone); // limpiar
-        });
-      });
-
-      // ===== Generar URL con query params =====
-      document.getElementById("shareBtn").addEventListener("click", () => {
-        const iglesia = iglesiaSelect.value;
-        const nombre = encodeURIComponent(nameInput.value);
-
-        // Construir la URL con parámetros
-        const url = `${window.location.origin}${window.location.pathname}?iglesia=${iglesia}&nombre=${nombre}`;
-
-        // Intentar usar Web Share API (si está disponible en móvil/navegador)
-        if (navigator.share) {
-          navigator.share({
-            title: "Invitación Especial",
-            text: "Te invito a este evento especial 🙌",
-            url: url
-          }).catch(err => console.log("Error al compartir:", err));
-        } else {
-          // Copiar link al portapapeles como fallback
-          navigator.clipboard.writeText(url).then(() => {
-            alert("✅ Link de la invitación copiado al portapapeles:\n" + url);
-          });
-        }
-      });
-
-      // ===== Leer query params al cargar la página =====
-      window.addEventListener("DOMContentLoaded", () => {
+      // Aplicar parámetros (sin inputs)
+      function applyQueryParams() {
         const params = new URLSearchParams(window.location.search);
         const iglesiaParam = params.get("iglesia");
         const nombreParam = params.get("nombre");
 
         if (nombreParam) {
-          recipient.textContent = decodeURIComponent(nombreParam);
+          // Si se pasa el nombre en la URL, lo aplicamos (decodificado)
+          try {
+            recipient.textContent = decodeURIComponent(nombreParam);
+          } catch (e) {
+            recipient.textContent = nombreParam;
+          }
         }
 
-        if (iglesiaParam && iglesias[iglesiaParam]) {
-          recipientIglesia.innerHTML = `${iglesias[iglesiaParam].nombre}<br><br>Invitación Especial`;
-          sealContainer.innerHTML = `<img src="${iglesias[iglesiaParam].logo}" alt="Logo">`;
+        if (iglesiaParam) {
+          // Si el parámetro coincide con una key conocida, cargamos logo/nombre desde el mapa.
+          if (iglesias[iglesiaParam]) {
+            recipientIglesia.innerHTML = `${iglesias[iglesiaParam].nombre}<br><br>Invitación Especial`;
+            sealContainer.innerHTML = `<img src="${iglesias[iglesiaParam].logo}" alt="Logo">`;
+          } else {
+            // Si no es una key conocida, mostramos el texto que venga en el query param
+            try {
+              recipientIglesia.innerHTML = `${decodeURIComponent(iglesiaParam)}<br><br>Invitación Especial`;
+            } catch (e) {
+              recipientIglesia.innerHTML = `${iglesiaParam}<br><br>Invitación Especial`;
+            }
+            // mantenemos el sello por defecto si no hay logo conocido
+          }
         }
+      }
+
+      // Descargar imagen PNG (igual que antes)
+      document.getElementById("downloadBtn").addEventListener("click", () => {
+        const card = document.querySelector(".card-wrap");
+
+        const clone = card.cloneNode(true);
+        clone.style.width = "920px";
+        clone.style.maxWidth = "920px";
+        clone.style.gridTemplateColumns = "1fr 1fr";
+        clone.style.padding = "2rem";
+        clone.style.transform = "scale(1)";
+        clone.style.position = "absolute";
+        clone.style.left = "-9999px";
+
+        document.body.appendChild(clone);
+
+        html2canvas(clone, { scale: 3, backgroundColor: "#fff" }).then(canvas => {
+          const link = document.createElement("a");
+          link.download = "invitacion-evangelistica.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+          document.body.removeChild(clone);
+        });
       });
+
+      // Inicialización al cargar
+      window.addEventListener("DOMContentLoaded", () => {
+        nuevoVersiculo();   // versículo aleatorio
+        applyQueryParams(); // leer y aplicar query params
+      });
+
+      // Si quieres que exista un botón de compartir (opcional),
+      // la lógica se puede añadir sin que rompa si el botón no está presente:
+      const shareBtn = document.getElementById("shareBtn");
+      if (shareBtn) {
+        shareBtn.addEventListener("click", () => {
+          // Tomamos el texto visible en la tarjeta (no dependemos de inputs)
+          const currentName = recipient.textContent === "[Invitado]" ? "" : recipient.textContent;
+          // Para iglesia intentamos leer el texto mostrado en recipientIglesia (simplificado)
+          const iglesiaText = recipientIglesia ? recipientIglesia.textContent.split("Invitación Especial")[0].trim() : "";
+          const url = `${window.location.origin}${window.location.pathname}?iglesia=${encodeURIComponent(iglesiaText)}&nombre=${encodeURIComponent(currentName)}`;
+
+          if (navigator.share) {
+            navigator.share({ title: "Invitación Especial", text: "Te invito a este evento", url }).catch(()=>{});
+          } else {
+            navigator.clipboard.writeText(url).then(()=> alert("Link copiado al portapapeles:\n" + url)).catch(()=>{ alert(url); });
+          }
+        });
+      }
     </script>
   </body>
 </html>
