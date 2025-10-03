@@ -442,7 +442,7 @@
         const nombre = encodeURIComponent(nameInput.value);
 
         // Construir la URL con parámetros
-        const url = `${window.location.origin}/shared/special-invitation.html?iglesia=${iglesia}&nombre=${nombre}`;
+        const url = `${window.location.origin}/cardInvitationEvangelistic/shared/special-invitation.html?iglesia=${iglesia}&nombre=${nombre}`;
 
         // Intentar usar Web Share API (si está disponible en móvil/navegador)
         if (navigator.share) {
@@ -461,3 +461,4 @@
     </script>
   </body>
 </html>
+
