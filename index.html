@@ -210,6 +210,8 @@
         <input type="file" id="logoInput" accept="image/*">
         <button class="download-btn" onclick="nuevoVersiculo()">Nuevo Versículo</button>
         <button class="download-btn" id="downloadBtn">📥 Descargar Invitación</button>
+        <!-- 🔵 BOTÓN DE COMPARTIR -->
+        <button class="download-btn" id="shareBtn">🔗 Compartir Invitación</button>
       </div>
     </div>
 
@@ -432,6 +434,29 @@
           link.click();
           document.body.removeChild(clone); // limpiar
         });
+      });
+
+      // ===== Generar URL con query params =====
+      document.getElementById("shareBtn").addEventListener("click", () => {
+        const iglesia = iglesiaSelect.value;
+        const nombre = encodeURIComponent(nameInput.value);
+
+        // Construir la URL con parámetros
+        const url = `${window.location.origin}/shared/special-invitation.html?iglesia=${iglesia}&nombre=${nombre}`;
+
+        // Intentar usar Web Share API (si está disponible en móvil/navegador)
+        if (navigator.share) {
+          navigator.share({
+            title: "Invitación Especial",
+            text: "Te invito a este evento especial 🙌",
+            url: url
+          }).catch(err => console.log("Error al compartir:", err));
+        } else {
+          // Copiar link al portapapeles como fallback
+          navigator.clipboard.writeText(url).then(() => {
+            alert("✅ Link de la invitación copiado al portapapeles:\n" + url);
+          });
+        }
       });
     </script>
   </body>
