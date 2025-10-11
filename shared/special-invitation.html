@@ -296,7 +296,7 @@
           // Si el parámetro coincide con una key conocida, cargamos logo/nombre desde el mapa.
           if (iglesias[iglesiaParam]) {
             recipientIglesia.innerHTML = `${iglesias[iglesiaParam].nombre}<br><br>Invitación Especial`;
-            sealContainer.innerHTML = `<img src="${iglesias[iglesiaParam].logo}" alt="Logo">`;
+            sealContainer.innerHTML = `<img src="${iglesias[iglesiaParam].logo}" alt="Logo" crossorigin="anonymous">`;
           } else {
             // Si no es una key conocida, mostramos el texto que venga en el query param
             try {
@@ -324,12 +324,35 @@
 
         document.body.appendChild(clone);
 
-        html2canvas(clone, { scale: 3, backgroundColor: "#fff" }).then(canvas => {
+        /*html2canvas(clone, { scale: 3, backgroundColor: "#fff" }).then(canvas => {
           const link = document.createElement("a");
           link.download = "invitacion-evangelistica.png";
           link.href = canvas.toDataURL("image/png");
           link.click();
           document.body.removeChild(clone);
+        });*/
+
+        /** Espera a que las imágenes del clon se carguen antes de renderizar */
+        const images = clone.querySelectorAll("img");
+        const promises = Array.from(images).map(img => {
+          return new Promise(resolve => {
+            if (img.complete) return resolve();
+            img.onload = img.onerror = () => resolve();
+          });
+        });
+
+        Promise.all(promises).then(() => {
+          html2canvas(clone, {
+            scale: 3,
+            backgroundColor: "#fff",
+            useCORS: true, // ✅ Permite cargar imágenes externas (como logos desde GitHub)
+          }).then(canvas => {
+            const link = document.createElement("a");
+            link.download = "invitacion-evangelistica.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+            document.body.removeChild(clone);
+          });
         });
       });
 
@@ -360,3 +383,4 @@
     </script>
   </body>
 </html>
+
